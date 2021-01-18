@@ -82,9 +82,10 @@ exports.LiberalizeWeb = class {
             // Style the iframe and div height
             card_element_wrapper.style.height = targetElement.style.height;
             card_element_iframe.style.height = card_element_wrapper.style.height;
-            card_element_iframe.style.backgroundColor = "white";
+            card_element_iframe.style.backgroundColor = "#ffffff00";
             card_element_iframe.style.border = "none";
             card_element_iframe.style.overflow = "hidden";
+            card_element_iframe.style.width = "100%"
             installCSS()
         } catch (err) {
             return err
