@@ -5,29 +5,29 @@ exports.LiberalizeWeb = class {
     constructor(publicKey, environment="prod") {
         switch (environment) {
             case "prod":
-                this.#cardElementUrl = ""
+                this.cardElementUrl = "https://cards-element.liberalize.io/"
                 break;
             case "staging":
-                this.#cardElementUrl = ""
+                this.cardElementUrl = "https://cards-element.staging.liberalize.io/"
                 break;
             case "dev":
-                this.#cardElementUrl = ""
+                this.cardElementUrl = "https://cards-element.dev.liberalize.io/"
                 break;
             case "local":
-                this.#cardElementUrl = ""
+                this.cardElementUrl = "https://cards-element.dev.liberalize.io/"
             default:
                 break;
         }
         let buff = new Buffer(publicKey + ":");
         let base64data = buff.toString('base64');
 
-        this.#public_key = base64data;
-        this.#mainFrame = window.location.href;
-        this.#sessionSecretIdentity = {}
-        this.#iframeId = {}
+        this.public_key = base64data;
+        this.mainFrame = window.location.href;
+        this.sessionSecretIdentity = {}
+        this.iframeId = {}
     }
 
-    #installCSS() {
+    installCSS() {
         const link = window.document.createElement('link');
             link.setAttribute('href', require('./index.css'));
             link.setAttribute('type', 'text/css');
@@ -37,7 +37,7 @@ exports.LiberalizeWeb = class {
         window.document.getElementsByTagName('head')[0].appendChild(link);
     }
 
-    #generateId() {
+    generateId() {
         // Alphanumeric characters
         const chars =
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -53,7 +53,7 @@ exports.LiberalizeWeb = class {
         return autoId;
     }
 
-    #elementsCheckCard() {
+    elementsCheckCard() {
         // TODO : Do some checks
         let error_occured = false;
         const error_box_element =  window.document.getElementById('liberalize-card-errors')
@@ -69,11 +69,11 @@ exports.LiberalizeWeb = class {
             card_element_wrapper.setAttribute('class', 'card_element_wrapper')
             // CREATE IFRAME
             const card_element_iframe = window.document.createElement('iframe');
-            card_element_iframe.setAttribute('src', that.#cardElementUrl+"?pub="+ that.public_key)
+            card_element_iframe.setAttribute('src', that.cardElementUrl+"?pub="+ that.public_key)
             card_element_iframe.setAttribute('class', 'lib-iframe')
             // Set cards iframe ID to a uuid
-            that.#iframeId['cards'] = 'lib-' + that.#generateId()
-            card_element_iframe.setAttribute('id', that.#iframeId['cards'])
+            that.iframeId['cards'] = 'lib-' + that.generateId()
+            card_element_iframe.setAttribute('id', that.iframeId['cards'])
             card_element_iframe.setAttribute('allow', 'payment') // use browser Payment request API
             // Set I-FRAME inside DIV
             card_element_wrapper.appendChild(card_element_iframe);
@@ -90,15 +90,15 @@ exports.LiberalizeWeb = class {
     }
 
     async cardElementPay() {
-        this.#sessionSecretIdentity['card'] = this.#generateId();
-        let iFrame = window.document.getElementById(this.#iframeId['card'])
+        this.sessionSecretIdentity['card'] = this.generateId();
+        let iFrame = window.document.getElementById(this.iframeId['card'])
         let that = this;
         return new Promise(function (resolve, reject) {
             window.addEventListener('message', (message) => {
                 console.log('messaged received from iFrame : ', message);
                 const msg = JSON.parse(message.data)
                 // // messaged to be received by card paymentMethodId & sessionSecretIdentity
-                if (msg && msg.sessionSecretIdentity === that.#sessionSecretIdentity['card']) {
+                if (msg && msg.sessionSecretIdentity === that.sessionSecretIdentity['card']) {
                     // Resolve & response the paymentMethodID
                     resolve(msg.paymentMethodId);
                 //     var xhr = new XMLHttpRequest();
@@ -173,7 +173,7 @@ exports.LiberalizeWeb = class {
                 //     xhr.send(params);
                 }
             });
-            iFrame.contentWindow.postMessage(`${that.#public_key} ${that.#sessionSecretIdentity} tokenize-card`, '*')
+            iFrame.contentWindow.postMessage(`${that.public_key} ${that.sessionSecretIdentity} tokenize-card`, '*')
         });
     }
 
