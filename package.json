@@ -1,0 +1,30 @@
+{
+  "name": "liberalize-frontend-web-sdk",
+  "version": "0.0.1",
+  "description": "This is the Frontend Web SDK to implement Payments Processing with Liberalize",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.21.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LiberationNetwork/liberalize-frontend-web-sdk.git"
+  },
+  "keywords": [
+    "javascript",
+    "liberalize",
+    "web",
+    "frontend",
+    "sdk"
+  ],
+  "author": "Kenneth",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LiberationNetwork/liberalize-frontend-web-sdk/issues"
+  },
+  "homepage": "https://github.com/LiberationNetwork/liberalize-frontend-web-sdk#readme"
+}
