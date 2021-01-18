@@ -1,26 +1,23 @@
 const axios = require('axios');
-
 exports.LiberalizeWeb = class {
     constructor(publicKey, environment="prod") {
         switch (environment) {
             case "prod":
-                this.cardElementUrl = "https://cards-element.liberalize.io/"
+                this.cardElementUrl = "https://cards-element.liberalize.io/#/"
                 break;
             case "staging":
-                this.cardElementUrl = "https://cards-element.staging.liberalize.io/"
+                this.cardElementUrl = "https://cards-element.staging.liberalize.io/#/"
                 break;
             case "dev":
-                this.cardElementUrl = "https://cards-element.dev.liberalize.io/"
+                this.cardElementUrl = "https://cards-element.dev.liberalize.io/#/"
                 break;
             case "local":
-                this.cardElementUrl = "https://cards-element.dev.liberalize.io/"
+                this.cardElementUrl = "https://cards-element.dev.liberalize.io/#/"
             default:
                 break;
         }
-        let buff = new Buffer(publicKey + ":");
-        let base64data = buff.toString('base64');
 
-        this.public_key = base64data;
+        this.public_key = publicKey;
         this.mainFrame = window.location.href;
         this.sessionSecretIdentity = {}
         this.iframeId = {}
@@ -61,6 +58,7 @@ exports.LiberalizeWeb = class {
     }
 
     async cardElement(targetElementId) {
+        // console.log('targetElementId -> ', targetElementId);
         let that = this;
         try {
             // CREATE DIV
@@ -68,6 +66,7 @@ exports.LiberalizeWeb = class {
             card_element_wrapper.setAttribute('class', 'card_element_wrapper')
             // CREATE IFRAME
             const card_element_iframe = window.document.createElement('iframe');
+            // console.log('that.public_key -> ', that.public_key);
             card_element_iframe.setAttribute('src', that.cardElementUrl+"?pub="+ that.public_key)
             card_element_iframe.setAttribute('class', 'lib-iframe')
             // Set cards iframe ID to a uuid
@@ -83,21 +82,26 @@ exports.LiberalizeWeb = class {
             // Style the iframe and div height
             card_element_wrapper.style.height = targetElement.style.height;
             card_element_iframe.style.height = card_element_wrapper.style.height;
+            card_element_iframe.style.backgroundColor = "white";
+            card_element_iframe.style.border = "none";
+            card_element_iframe.style.overflow = "hidden";
+            installCSS()
         } catch (err) {
             return err
         }
     }
 
     async cardElementPay() {
-        this.sessionSecretIdentity['card'] = this.generateId();
-        let iFrame = window.document.getElementById(this.iframeId['card'])
+        this.sessionSecretIdentity['cards'] = this.generateId();
+        // console.log('this.iframeId[card] -> ', this.iframeId);
+        let iFrame = window.document.getElementById(this.iframeId['cards'])
         let that = this;
         return new Promise(function (resolve, reject) {
             window.addEventListener('message', (message) => {
-                console.log('messaged received from iFrame : ', message);
+                // console.log('messaged received from iFrame : ', message);
                 const msg = JSON.parse(message.data)
                 // // messaged to be received by card paymentMethodId & sessionSecretIdentity
-                if (msg && msg.sessionSecretIdentity === that.sessionSecretIdentity['card']) {
+                if (msg && msg.sessionSecretIdentity === that.sessionSecretIdentity['cards']) {
                     // Resolve & response the paymentMethodID
                     resolve(msg.paymentMethodId);
                 //     var xhr = new XMLHttpRequest();
@@ -172,7 +176,8 @@ exports.LiberalizeWeb = class {
                 //     xhr.send(params);
                 }
             });
-            iFrame.contentWindow.postMessage(`${that.public_key} ${that.sessionSecretIdentity} tokenize-card`, '*')
+            // console.log('that.sessionSecretIdentity -> ', that.sessionSecretIdentity);
+            iFrame.contentWindow.postMessage(`pay ${that.sessionSecretIdentity['cards']}`, '*')
         });
     }
 
