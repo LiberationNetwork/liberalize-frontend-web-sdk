@@ -1,5 +1,4 @@
 const axios = require('axios');
-import './index.css';
 
 exports.LiberalizeWeb = class {
     constructor(publicKey, environment="prod") {
