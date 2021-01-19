@@ -103,8 +103,12 @@ exports.LiberalizeWeb = class {
                 const msg = JSON.parse(message.data)
                 // // messaged to be received by card paymentMethodId & sessionSecretIdentity
                 if (msg && msg.sessionSecretIdentity === that.sessionSecretIdentity['cards']) {
+                    const response = {
+                        paymentMethodId: msg.paymentMethodId,
+                        securityCode: msg.securityPin
+                    }
                     // Resolve & response the paymentMethodID
-                    resolve(msg.paymentMethodId);
+                    resolve(response);
                 //     var xhr = new XMLHttpRequest();
                 //     xhr.open(opts.method, opts.url);
                 //     xhr.onload = function () {
