@@ -87,6 +87,14 @@ exports.LiberalizeWeb = class {
             card_element_iframe.style.overflow = "hidden";
             card_element_iframe.style.width = "100%"
             installCSS()
+            return new Promise(function(resolve, reject) {
+                window.addEventListener('message', (message) => {
+                    const msg = JSON.parse(message.data)
+                    if (msg && msg.initialLoad) {
+                        resolve({initialLoad: true})
+                    }
+                })
+            })
         } catch (err) {
             return err
         }
