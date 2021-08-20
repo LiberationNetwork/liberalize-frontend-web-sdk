@@ -4,15 +4,19 @@ exports.LiberalizeWeb = class {
         switch (environment) {
             case "prod":
                 this.cardElementUrl = "https://cards-element.liberalize.io/#/"
+                this.qrElementUrl = "http://qr-element.liberalize.io/#/"
                 break;
             case "staging":
                 this.cardElementUrl = "https://cards-element.staging.liberalize.io/#/"
+                this.qrElementUrl = "http://qr-element.staging.liberalize.io/#/"
                 break;
             case "dev":
                 this.cardElementUrl = "https://cards-element.dev.liberalize.io/#/"
+                this.qrElementUrl = "http://qr-element.dev.liberalize.io/#/"
                 break;
             case "local":
                 this.cardElementUrl = "https://cards-element.dev.liberalize.io/#/"
+                this.qrElementUrl = "http://qr-element.dev.liberalize.io/#/"
             default:
                 break;
         }
@@ -95,6 +99,46 @@ exports.LiberalizeWeb = class {
                     }
                 })
             })
+        } catch (err) {
+            return err
+        }
+    }
+
+    async qrElement(targetElementId, qrData, source, size=256) {
+        // console.log('targetElementId -> ', targetElementId);
+        let that = this;
+        try {
+            // CREATE DIV
+            const qr_element_wrapper = window.document.createElement('div');
+            qr_element_wrapper.setAttribute('class', 'qr_element_wrapper')
+            // CREATE IFRAME
+            const qr_element_iframe = window.document.createElement('iframe');
+            // console.log('that.public_key -> ', that.public_key);
+            qr_element_iframe.setAttribute('src', that.qrElementUrl+"?qrData=\""+ qrData+"\"&source="+source+"&size="+size)
+            qr_element_iframe.setAttribute('class', 'lib-iframe')
+            // Set cards iframe ID to a uuid
+            that.iframeId['qr'] = 'lib-' + that.generateId()
+            qr_element_iframe.setAttribute('id', that.iframeId['qr'])
+            qr_element_iframe.setAttribute('allow', 'payment') // use browser Payment request API
+            // Set I-FRAME inside DIV
+            qr_element_wrapper.appendChild(qr_element_iframe);
+            // Set DIV inside target DIV element
+            let targetElement = window.document.getElementById(targetElementId);
+            targetElement.appendChild(qr_element_wrapper);
+            
+            // Style the iframe and div height
+            qr_element_wrapper.style.height = `${size}px`;
+            qr_element_iframe.style.height = `${size}px`;
+            qr_element_wrapper.style.width = `${size}px`;
+            qr_element_iframe.style.width = `${size}px`;
+            qr_element_iframe.style.backgroundColor = "#ffffff00";
+            qr_element_iframe.style.border = "none";
+            qr_element_iframe.style.overflow = "hidden";
+            // qr_element_iframe.style.width = "100%"
+            // installCSS()
+            return {
+                load_status: "SUCCESS"
+            }
         } catch (err) {
             return err
         }
