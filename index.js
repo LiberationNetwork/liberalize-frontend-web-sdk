@@ -114,6 +114,7 @@ exports.LiberalizeWeb = class {
             // CREATE IFRAME
             const qr_element_iframe = window.document.createElement('iframe');
             // console.log('that.public_key -> ', that.public_key);
+            qrData = Buffer.from(qrData).toString('base64')
             qr_element_iframe.setAttribute('src', that.qrElementUrl+"?qrData="+ qrData+"&source="+source+"&size="+size)
             qr_element_iframe.setAttribute('class', 'lib-iframe')
             // Set cards iframe ID to a uuid
