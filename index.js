@@ -5,18 +5,22 @@ exports.LiberalizeWeb = class {
             case "prod":
                 this.cardElementUrl = "https://cards-element.liberalize.io/#/"
                 this.qrElementUrl = "http://qr-element.liberalize.io/#/"
+                this.paymentApi = "https://payment.api.liberalize.io"
                 break;
             case "staging":
                 this.cardElementUrl = "https://cards-element.staging.liberalize.io/#/"
                 this.qrElementUrl = "http://qr-element.staging.liberalize.io/#/"
+                this.paymentApi = "https://payment.api.staging.liberalize.io"
                 break;
             case "dev":
                 this.cardElementUrl = "https://cards-element.dev.liberalize.io/#/"
                 this.qrElementUrl = "http://qr-element.dev.liberalize.io/#/"
+                this.paymentApi = "https://payment.api.staging.liberalize.io"
                 break;
             case "local":
                 this.cardElementUrl = "https://cards-element.dev.liberalize.io/#/"
                 this.qrElementUrl = "http://qr-element.dev.liberalize.io/#/"
+                this.paymentApi = "https://payment.api.staging.liberalize.io"
             default:
                 break;
         }
@@ -237,6 +241,26 @@ exports.LiberalizeWeb = class {
             // console.log('that.sessionSecretIdentity -> ', that.sessionSecretIdentity);
             iFrame.contentWindow.postMessage(`pay ${that.sessionSecretIdentity['cards']}`, '*')
         });
+    }
+
+    async qrSupported(libService="elements") {
+        try {
+            let buff = new Buffer(this.public_key + ":");
+            let base64data = buff.toString('base64');
+            var response = await axios.get(
+                `${this.paymentApi}/supported`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Basic ${base64data}`,
+                        "x-lib-pos-type": libService
+                    }
+                }
+            )
+            return response.data
+        } catch (err) {
+            return err
+        }
     }
 
 }
