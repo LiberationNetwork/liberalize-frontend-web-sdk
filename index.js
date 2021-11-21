@@ -253,11 +253,51 @@ exports.LiberalizeWeb = class {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Basic ${base64data}`,
+                        "Access-Control-Allow-Origin": "*",
                         "x-lib-pos-type": libService
                     }
                 }
             )
-            return response.data
+            // Beautify Response 
+            const prettierResponse = {}
+            if (response.data) {
+                Object.keys(response.data).map((eachScheme) => {
+                    prettierResponse[eachScheme] = response.data[eachScheme]
+                    prettierResponse[eachScheme] = prettierResponse[eachScheme].map((eachAccount, index) => {
+                        // If there's no image returned, use fallback image
+                        if (!eachAccount['image']) {
+                            switch (eachScheme) {
+                                case "alipayqr":
+                                    eachAccount['image'] = "https://payment-source-image.liberalize.io/fd3b5e2663add5b3b228b5f7c355e4e0bb44a128.png"
+                                    break;
+                                case "grabpay":
+                                    eachAccount['image'] = "https://payment-source-image.liberalize.io/adcbb770f61209613c3481424b24086c02776933.png"
+                                    break;
+                                case "liquidpay":
+                                    eachAccount['image'] =  "https://payment-source-image.liberalize.io/bfcc2dd6ad8a250d629e561944b39e75c941b26d.png"
+                                    break;
+                                case "paynow":
+                                    eachAccount['image'] = "https://payment-source-image.liberalize.io/f739fcca806bd4faa8a3880cfff1a2d6335eec72.png"
+                                    break;
+                                case "shopeepay":
+                                    eachAccount['image'] = "https://payment-source-image.liberalize.io/66c544562d2e094339eb961998d00f2994892dff.png"
+                                    break;
+                                case "unionpayqr":
+                                    eachAccount['image'] = "https://payment-source-image.liberalize.io/3c2ce3134f32622a5204fb6324ccbddc0c87ffc6.png"
+                                    break;
+                                case "wechatpayqr":
+                                    eachAccount['image'] = "https://payment-source-image.liberalize.io/69a361a386fb9a5766c8bd67bfd91eb755885a87.png"
+                                    break;
+                                default:
+                                    break;
+                            }
+                            return eachAccount
+                        }
+                    })
+                })
+            }
+            console.log(prettierResponse);
+            return prettierResponse
         } catch (err) {
             return err
         }
