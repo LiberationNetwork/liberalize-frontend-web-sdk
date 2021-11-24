@@ -4,22 +4,22 @@ exports.LiberalizeWeb = class {
         switch (environment) {
             case "prod":
                 this.cardElementUrl = "https://cards-element.liberalize.io/#/"
-                this.qrElementUrl = "http://qr-element.liberalize.io/#/"
+                this.qrElementUrl = "https://qr-element.liberalize.io/#/"
                 this.paymentApi = "https://payment.api.liberalize.io"
                 break;
             case "staging":
                 this.cardElementUrl = "https://cards-element.staging.liberalize.io/#/"
-                this.qrElementUrl = "http://qr-element.staging.liberalize.io/#/"
+                this.qrElementUrl = "https://qr-element.staging.liberalize.io/#/"
                 this.paymentApi = "https://payment.api.staging.liberalize.io"
                 break;
             case "dev":
                 this.cardElementUrl = "https://cards-element.dev.liberalize.io/#/"
-                this.qrElementUrl = "http://qr-element.dev.liberalize.io/#/"
+                this.qrElementUrl = "https://qr-element.dev.liberalize.io/#/"
                 this.paymentApi = "https://payment.api.staging.liberalize.io"
                 break;
             case "local":
                 this.cardElementUrl = "https://cards-element.dev.liberalize.io/#/"
-                this.qrElementUrl = "http://qr-element.dev.liberalize.io/#/"
+                this.qrElementUrl = "https://qr-element.dev.liberalize.io/#/"
                 this.paymentApi = "https://payment.api.staging.liberalize.io"
             default:
                 break;
