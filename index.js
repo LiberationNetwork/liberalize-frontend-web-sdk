@@ -129,6 +129,7 @@ exports.LiberalizeWeb = class {
             qr_element_wrapper.appendChild(qr_element_iframe);
             // Set DIV inside target DIV element
             let targetElement = window.document.getElementById(targetElementId);
+            targetElement.innerHTML = '';
             targetElement.appendChild(qr_element_wrapper);
             
             // Style the iframe and div height
