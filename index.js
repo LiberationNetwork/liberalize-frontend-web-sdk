@@ -288,15 +288,20 @@ exports.LiberalizeWeb = class {
                                 case "wechatpayqr":
                                     eachAccount['image'] = "https://payment-source-image.liberalize.io/69a361a386fb9a5766c8bd67bfd91eb755885a87.png"
                                     break;
+                                case "atomeredirect":
+                                    eachAccount['image'] = "https://payment-source-image.liberalize.io/fd3b5e2663add5b3b228b5f7c355e4e0b44atome.png"
+                                    break;
+                                case "atomeqr":
+                                    eachAccount['image'] = "https://payment-source-image.liberalize.io/fd3b5e2663add5b3b228b5f7c355e4e0b44atome.png"
+                                    break;
                                 default:
                                     break;
                             }
-                            return eachAccount
                         }
+                        return eachAccount
                     })
                 })
             }
-            console.log(prettierResponse);
             return prettierResponse
         } catch (err) {
             return err
