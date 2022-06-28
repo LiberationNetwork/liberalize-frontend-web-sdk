@@ -262,7 +262,7 @@ exports.LiberalizeWeb = class {
             // Beautify Response 
             const prettierResponse = {}
             if (response.data) {
-                Object.keys(response.data).map((eachScheme) => {
+                Object.keys(response.data).filter((eachScheme) => eachScheme !== 'card').map((eachScheme) => {
                     prettierResponse[eachScheme] = response.data[eachScheme]
                     prettierResponse[eachScheme] = prettierResponse[eachScheme].map((eachAccount, index) => {
                         // If there's no image returned, use fallback image
