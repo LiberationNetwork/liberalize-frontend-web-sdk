@@ -121,6 +121,7 @@ exports.LiberalizeWeb = class {
             qrData = Buffer.from(qrData).toString('base64')
             qr_element_iframe.setAttribute('src', that.qrElementUrl+"?qrData="+ qrData+"&source="+source+"&size="+size)
             qr_element_iframe.setAttribute('class', 'lib-iframe')
+            qr_element_iframe.setAttribute('scrolling', 'no')
             // Set cards iframe ID to a uuid
             that.iframeId['qr'] = 'lib-' + that.generateId()
             qr_element_iframe.setAttribute('id', that.iframeId['qr'])
