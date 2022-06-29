@@ -163,8 +163,10 @@ exports.LiberalizeWeb = class {
                 // // messaged to be received by card paymentMethodId & sessionSecretIdentity
                 if (msg && msg.sessionSecretIdentity === that.sessionSecretIdentity['cards']) {
                     const response = {
-                        source: msg.paymentMethodId,
-                        securityCode: msg.securityPin
+                        source: msg.paymentMethodId || "",
+                        securityCode: msg.securityPin || "",
+                        code: msg.code,
+                        message: msg.message
                     }
                     // Resolve & response the paymentMethodID
                     resolve(response);
