@@ -1,8 +1,8 @@
 const axios = require('axios');
 exports.LiberalizeWeb = class {
-    constructor(publicKey, environment="prod") {
+    constructor(publicKey, environment="production") {
         switch (environment) {
-            case "prod":
+            case "production":
                 this.cardElementUrl = "https://cards-element.liberalize.io/#/"
                 this.qrElementUrl = "https://qr-element.liberalize.io/#/"
                 this.paymentApi = "https://payment.api.liberalize.io"
